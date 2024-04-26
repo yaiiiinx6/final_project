@@ -59,17 +59,19 @@ window = display.set_mode((win_width, win_height))
 display.set_caption("Maze")
 background = transform.scale(image.load('lawn.png'), (win_width, win_height ))
 
-player = Player('flower.png', 5, win_height - 80, 4)
+player = Player('flower.png', 5, win_height - 80, 3)
 monster = Enemy('zombie.png', win_width - 80, 280, 2)
 monster2 = Enemy('zombie2.png', win_height - 90, 140, 3)
 final = GameSprite('win.png', win_width - 120, win_height - 80, 0)
+help = GameSprite('apple.png', win_height - 80, 60, 0)
+# help = GameSprite('apple.png',100, 350, 0)
 
 w1 = Wall(150, 100, 60, 110, 10, 430, 15)
 w2 = Wall(150, 100, 60, 110, 440, 300, 15)
 w3 = Wall(150, 100, 60, 110, 10, 20, 330)
 w4 = Wall( 150, 100, 60, 110, 150, 200, 15)
 w5 = Wall( 150, 100, 60, 110, 330, 300, 15)
-w6 = Wall(150, 100, 60, 190, 240, 400, 15)
+w6 = Wall(150, 100, 60, 210, 240, 400, 15)
 w7 = Wall(150, 100, 60, 500, 230, 15, 350)
 
 # написи
@@ -101,12 +103,14 @@ while game:
         player.update()
         monster.update()
         monster2.update()
+        help.update()
 
 
         player.reset()
         monster.reset()
         monster2.reset()
         final.reset()
+        help.reset()
 
 
         w1.draw_wall()
@@ -119,11 +123,14 @@ while game:
 
 
     # Ситуація "Програш"
-    if sprite.collide_rect(player, monster) or sprite.collide_rect(player, w1) or sprite.collide_rect(player, w2) or sprite.collide_rect(player, w3):
+    if sprite.collide_rect(player, monster) or sprite.collide_rect(player, w1) or sprite.collide_rect(player, w2) or sprite.collide_rect(player, w3) or sprite.collide_rect(player, w4) or sprite.collide_rect(player, w5) or sprite.collide_rect(player, w6) or sprite.collide_rect(player, w7):
         finish = True
         window.blit(lose, (210, 210))
         kick.play()
 
+    if sprite.collide_rect(player, help):
+        player.speed = 5
+        help.image = Surface((0, 0), SRCALPHA)
 
     # Ситуація "Перемога"
     if sprite.collide_rect(player, final):
