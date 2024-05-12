@@ -1,9 +1,11 @@
 from pygame import *
 
 class GameSprite(sprite.Sprite):
-    def __init__(self, player_image, player_x, player_y, player_speed):
+    def __init__(self, player_image, player_x, player_y, player_speed, size_x =65, size_y = 65):
         super().__init__()
-        self.image = transform.scale(image.load(player_image), (65, 65))
+        self.size_x = size_x
+        self.size_y = size_y
+        self.image = transform.scale(image.load(player_image), (size_x, size_y))
         self.speed = player_speed
         self.rect = self.image.get_rect()
         self.rect.x = player_x
@@ -64,6 +66,7 @@ monster = Enemy('zombie.png', win_width - 80, 280, 2)
 monster2 = Enemy('zombie2.png', win_height - 90, 140, 3)
 final = GameSprite('win.png', win_width - 120, win_height - 80, 0)
 help = GameSprite('apple.png', win_height - 80, 60, 0)
+small = GameSprite('small.png',400, 350, 1)
 # help = GameSprite('apple.png',100, 350, 0)
 
 w1 = Wall(150, 100, 60, 110, 10, 430, 15)
@@ -104,6 +107,7 @@ while game:
         monster.update()
         monster2.update()
         help.update()
+        small.update()
 
 
         player.reset()
@@ -111,6 +115,7 @@ while game:
         monster2.reset()
         final.reset()
         help.reset()
+        small.reset()
 
 
         w1.draw_wall()
@@ -131,6 +136,16 @@ while game:
     if sprite.collide_rect(player, help):
         player.speed = 5
         help.image = Surface((0, 0), SRCALPHA)
+
+    if sprite.collide_rect(player, small):
+        player.image = transform.scale(image.load('flower.png'), (49, 49))
+        player.rect = player.image.get_rect()
+        player.rect.x = 400
+        player.rect.y = 350
+        small.image = Surface((0, 0), SRCALPHA)
+        small.rect.x = 0
+        small.rect.y = 0
+
 
     # Ситуація "Перемога"
     if sprite.collide_rect(player, final):
